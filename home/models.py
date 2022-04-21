@@ -55,10 +55,10 @@ class Solutions(models.Model):
     userId=models.ForeignKey(User,on_delete=models.CASCADE)
     submitted=models.DateTimeField(auto_now=True)
 
-# class TestCases(models.Model):
-#     input = 
-#     output = 
-#     problemId=models.ForeignKey(Problems,on_delete=CASCADE)
+class TestCases(models.Model):
+    input = models.CharField(max_length=100)
+    output = models.CharField(max_length=100)
+    problemId=models.ForeignKey(Problems,on_delete=CASCADE)
 
 
 #sample model class
