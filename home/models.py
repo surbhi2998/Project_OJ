@@ -24,7 +24,6 @@ class User(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(max_length=255,unique=True)
     #password = models.CharField(max_length=100)
     is_staff=models.BooleanField(default=False)
-    
     rank=models.IntegerField(default=0)
     problemSolved = models.IntegerField(default=0)
     isAdmin= models.BooleanField(default=False) # field will be not be in form but in db
@@ -32,6 +31,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects=UserManager()
+
 
 class Problems(models.Model):
     problemStatement = models.TextField(max_length=5000)
@@ -55,10 +55,10 @@ class Solutions(models.Model):
     userId=models.ForeignKey(User,on_delete=models.CASCADE)
     submitted=models.DateTimeField(auto_now=True)
 
-class TestCases(models.Model):
-    input = models.CharField(max_length=100)
-    output = models.CharField(max_length=100)
-    problemId=models.ForeignKey(Problems,on_delete=CASCADE)
+# class TestCases(models.Model):
+#     input = models.CharField(max_length=100)
+#     output = models.CharField(max_length=100)
+#     problemId=models.ForeignKey(Problems,on_delete=CASCADE)
 
 
 #sample model class

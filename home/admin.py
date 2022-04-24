@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Items,User
+from .models import Items,User,Solutions,Problems
 
 # Register your models here.
 # class ItemsAdmin(admin.ModelAdmin):
@@ -12,6 +12,12 @@ from .models import Items,User
 class ItemsAdmin(admin.ModelAdmin):
     pass
 @admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    pass
+@admin.register(Solutions)
+class UserAdmin(admin.ModelAdmin):
+    pass
+@admin.register(Problems)
 class UserAdmin(admin.ModelAdmin):
     pass
 
