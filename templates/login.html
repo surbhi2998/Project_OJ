@@ -1,16 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="login" method="post">
+{% extends "base.html" %}
+{% block title %}Login PAGE OJ{% endblock title %}
+{% block body %}
+
+    <br>
+    <form action="{% url 'signin' %}" method="post">
         {% csrf_token %}
-        <input type="text" name="email" placeholder="email"><br>
-        <input type="password" name="password" placeholder="password"><br>
+        <input type="text" name="email" placeholder="email"><br><br>
+        <input type="password" name="password" placeholder="password"><br><br>
         <input type="submit">
 
     </form>
@@ -19,5 +15,4 @@
         <h3>{{ message }}</h3>
         {% endfor %}
     </div>
-</body>
-</html>
+{% endblock body %}

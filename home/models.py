@@ -51,14 +51,22 @@ class Solutions(models.Model):
         ('TIME LIMIT EXCEEDED',('Time Limit Exceeded')),
         ('ACCEPTED',('Accepted')), # TCno failed needs to be added
     )
-    verdict=models.CharField(max_length=50,choices=VERDICT)
+    verdict=models.CharField(max_length=50,choices=VERDICT,null=True)
     userId=models.ForeignKey(User,on_delete=models.CASCADE)
     submitted=models.DateTimeField(auto_now=True)
+    language=models.CharField(max_length=50,default="a")
+    code=models.TextField(default="a")
 
-# class TestCases(models.Model):
-#     input = models.CharField(max_length=100)
-#     output = models.CharField(max_length=100)
-#     problemId=models.ForeignKey(Problems,on_delete=CASCADE)
+class TestCases(models.Model):
+    input = models.CharField(max_length=100)
+    output = models.CharField(max_length=100)
+    problemId=models.ForeignKey(Problems,on_delete=models.CASCADE)
+
+class Contact(models.Model):
+    name=models.CharField(max_length=50)
+    email=models.EmailField()
+    phone=models.CharField(max_length=10)
+    desc=models.TextField()
 
 
 #sample model class

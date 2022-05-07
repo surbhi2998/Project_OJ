@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Code Editor PAGE OJ{% endblock title %}
+{% block body %}
+
+
+   <div>
+    <script src="{% static '/codemirror/lib/codemirror.js' %}"></script>
+    <link href="{% static '/codemirror/lib/codemirror.css' %}" rel="stylesheet" type="text/css"/>
+    <script src="{% static '/codemirror/mode/python/python.js' %}"></script>
+    <link href="{% static '/codemirror/theme/dracula.css' %}" rel="stylesheet" type="text/css"/>
+    <br>
+    
+    <form action="{% url 'handle_submissions' problem.id %}" method="post">
+    {% csrf_token %}
+    <p>{{ problem.id }}{{ problem.name}}</p>
+    <textarea id="editor" name="editor"><p> I am a paragraph</p></textarea>
+    <input type="submit">
+    </form>
+    
+    <script>
+      var editor= CodeMirror.fromTextArea(document.getElementById('editor'),{
+          mode: "python",
+          theme: "dracula",
+          lineNumbers: true
+      });
+      editor.setSize("800","500");
+    </script>
+   </div>
+{% endblock body %}
