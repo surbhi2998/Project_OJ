@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Problem PAGE OJ{% endblock title %}
+{% block body %}
+
+<div id="problems">
+        
+    <div>
+    {{problem.problemStatement}}
+    </div>
+         
+</div>
+<div>
+    <a href="{% url 'editor' problem.id %}">Submit Code</a>
+  <!-- <a href="/editor">Submit Code</a>-->
+</div>
+{% endblock body %} 
+       
