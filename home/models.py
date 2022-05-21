@@ -52,10 +52,13 @@ class Solutions(models.Model):
         ('ACCEPTED',('Accepted')), # TCno failed needs to be added
     )
     verdict=models.CharField(max_length=50,choices=VERDICT,null=True)
-    userId=models.ForeignKey(User,on_delete=models.CASCADE)
-    submitted=models.DateTimeField(auto_now=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    submitted_date=models.DateTimeField(auto_now=True)
     language=models.CharField(max_length=50,default="a")
     code=models.TextField(default="a")
+
+
+    unique_together=["submitted_date",]
 
 class TestCases(models.Model):
     input = models.CharField(max_length=100)
