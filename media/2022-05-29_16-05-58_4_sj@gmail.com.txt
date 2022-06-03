@@ -1,0 +1,35 @@
+def maxSubArray(self, nums: List[int]) -> int:
+    maxarr = max(nums)
+    window_sum = 0
+    
+    for num in nums:
+        if window_sum < 0:
+            window_sum = 0
+        window_sum += num
+        # To keep track of the previous value
+        maxarr = max(maxarr, window_sum)
+        
+    return maxarr
+
+def maxSubArray_index(self, nums: List[int]) -> int:
+    '''
+    Returns the starting and ending index
+    of the max subarray calculated above
+    '''
+    maxarr = max(nums)
+    window_sum = 0
+
+    start = 0
+    end = 0
+
+    for ind, num in enumerate(nums):
+        if window_sum < 0:
+            window_sum = 0
+            start = ind
+        window_sum += num
+
+        if window_sum > maxarr:
+            end = ind
+            maxarr = window_sum
+
+    return start,end

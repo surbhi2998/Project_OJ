@@ -1,5 +1,8 @@
+from datetime import date, datetime
+from distutils.command.upload import upload
 from tkinter import CASCADE
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser,PermissionsMixin)
 
 # Create your models here.
@@ -42,25 +45,31 @@ class Problems(models.Model):
         ('HARD',('Hard')),
     )
     category=models.CharField(max_length=32,choices=CATEGORY) 
+    def __str__(self):
+        return self.name
+
 
 class Solutions(models.Model):
-    problemId=models.ForeignKey(Problems, on_delete=models.CASCADE)
-    VERDICT = (
-        ('RUN TIME ERROR', ('Run Time Error')),
-        ('COMPILE TIME ERROR',('Compile Time Error')),
-        ('TIME LIMIT EXCEEDED',('Time Limit Exceeded')),
-        ('ACCEPTED',('Accepted')), # TCno failed needs to be added
-    )
-    verdict=models.CharField(max_length=50,choices=VERDICT,null=True)
-    userId=models.ForeignKey(User,on_delete=models.CASCADE)
-    submitted=models.DateTimeField(auto_now=True)
-    language=models.CharField(max_length=50,default="a")
-    code=models.TextField(default="a")
+    problem=models.ForeignKey(Problems, on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    submitted_date=models.DateTimeField(auto_now_add=True)
+    language=models.CharField(max_length=50,default="a") 
+    code_file_path=models.TextField()
+    verdict=models.CharField(max_length=100)
+    unique_together=["submitted_date",]
 
 class TestCases(models.Model):
-    input = models.CharField(max_length=100)
-    output = models.CharField(max_length=100)
-    problemId=models.ForeignKey(Problems,on_delete=models.CASCADE)
+    # making many tomany input output fileds for 1 problem
+    def get_tc_name():
+        current_date=str(date.today())
+        time=datetime.now()
+        time=time.strftime("%H-%M-%S")
+        tc_name=(f"{current_date}_{time}")
+        return tc_name
+
+    problem=models.ForeignKey(Problems,on_delete=models.CASCADE,related_name='testcases')
+    testcase=models.FileField(upload_to=f'testcases/{get_tc_name()}')
+
 
 class Contact(models.Model):
     name=models.CharField(max_length=50)

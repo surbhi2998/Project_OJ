@@ -103,16 +103,17 @@ class ItemsAdmin(admin.ModelAdmin):
 # class UserAdmin(admin.ModelAdmin):
 #     pass
 @admin.register(Solutions)
-class UserAdmin(admin.ModelAdmin):
+class SolutionsAdmin(admin.ModelAdmin):
     pass
 @admin.register(Problems)
-class UserAdmin(admin.ModelAdmin):
+class ProblemsAdmin(admin.ModelAdmin):
     pass
 @admin.register(TestCases)
-class ItemsAdmin(admin.ModelAdmin):
+class TestCaseAdmin(admin.ModelAdmin):
     pass
 @admin.register(Contact)
-class ItemsAdmin(admin.ModelAdmin):
+class ContactAdmin(admin.ModelAdmin):
     pass
+
 
 # Register your models here.
