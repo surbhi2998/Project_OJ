@@ -1,0 +1,14 @@
+inp= input()
+inp=inp.split(' ')
+nums=[int(x) for x in inp]
+def maxSubArray(nums):
+    count=maxCount=float('-inf')
+    for i in range(len(nums)):
+        count=nums[i]
+        maxCount=max(count, maxCount)
+        for j in range(i+1,len(nums)):
+            count +=nums[j]
+            maxCount=max(maxCount, count)
+    return maxCount
+    
+print(maxSubArray(nums))

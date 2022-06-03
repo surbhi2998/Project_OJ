@@ -1,18 +1,15 @@
 from django.shortcuts import render,HttpResponse,redirect
-from home.models import Contact,Problems
+from home.models import Contact,Problems,Solutions
 from django.contrib.auth import get_user_model
 from django.contrib.auth import logout,login,authenticate
-import sys
 from django.conf import settings
 from django.core.files.base import File
 from datetime import date,datetime
-
 from home.utility.api_utils import get_languages,languages,create_submissions
 
 # Create your views here.
 User=get_user_model()
 def home(request):
-   # return HttpResponse(" HOMEPAGE(will be displaying whenever somebody)")
     if request.method=="GET":
         problems = Problems.objects.all()
         return render(request,'home.html',{'problems': problems})
@@ -54,36 +51,42 @@ def get_file_name(p_id,user_email):
 def handle_submissions(request,pk): 
     if request.user.is_authenticated:
         problem_id=int(pk)
-        problem=Problems.objects.get(id=problem_id)
-        if  request.method=="POST":
-            # editor=request.POST['editor']
-            editor=request.POST.get('code')
-            language=request.POST.get('language')
-            # print(request.POST)
-            print(editor,problem.name,problem.id,language,problem)
-            # TODO:save data into db and check for many to many from user and solutions 
-            try:
-                languages=get_languages()
-                submission=create_submissions(code=editor,language=language)
-                print(submission)
-                file_name=get_file_name(str(problem.id),request.user)
-                with open(f"{settings.MEDIA_ROOT}/{file_name}.txt","w+") as file:
-                    file.write(editor)
-                # orig_stdout= sys.stdout
-                # sys.stdout=open('file.txt','w')
-                # exec(editor)
-                # sys.stdout.close()
-                # sys.stdout=orig_stdout
-                # output=open('file.txt','r').read()
-                
-            except Exception as e:
-                # sys.stdout.close()
-                # sys.stdout=orig_stdout
-                # output=e
-                pass
-            
+        problem=Problems.objects.prefetch_related('testcases').get(id=problem_id)#query set api
+        testcases=problem.testcases.all()
+        
+        for tc in testcases:
 
+            with open(f'{settings.MEDIA_ROOT}/{tc.testcase}',"r+") as file:
+                arr = file.readlines()
+                arr = [x.strip('\n') for x in arr]
+                input_part=arr[0].split('=')[1]
+                output_part=arr[1].split('=')[1]
+                print(input_part,output_part)
+            if  request.method=="POST":
+                editor=request.POST.get('code')
+                language=request.POST.get('language')
+
+                print(editor,problem.name,problem.id,language,problem) 
+                try:
+                    languages=get_languages()
+                    submission=create_submissions(code=editor,language=language,stdin=input_part)
+                    print(submission)
+                    file_name=get_file_name(str(problem.id),request.user)
+                    with open(f"{settings.MEDIA_ROOT}/{file_name}.txt","w+") as file:
+                        file.write(editor)
+                        user_email=request.user.email
+                        user=User.objects.get(email=user_email)
+                        status=submission.get("status")
+                        verdict=status.get("description")
+                        solution=Solutions.objects.create(problem=problem,user=user,language=language,
+                        code_file_path=f"{settings.MEDIA_ROOT}code/{file_name}.txt",verdict=verdict)
+                        solution.save()
+                        
+                except Exception as e:
+                    pass
+                
             return HttpResponse("yess")  
     else:
         return redirect(request,'login.html')
+
 

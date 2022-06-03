@@ -17,7 +17,8 @@ languages={"Python":71,
             "C++":52,
             "Javascript":63}
 
-def create_submissions(code,language):
+
+def create_submissions(code,language,stdin=None):
     url = "https://coderunner3.p.rapidapi.com/submissions/"
     language_id= languages.get(language)
 
@@ -26,6 +27,7 @@ def create_submissions(code,language):
     payload = {
         "language_id": language_id,
         "source_code": code,
+        "stdin":stdin,
     }
     headers = {
         "content-type": "application/json",
