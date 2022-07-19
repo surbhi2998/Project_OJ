@@ -1,0 +1,2 @@
+Input=5 4 -1 7 8
+Output=2
